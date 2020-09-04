@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {View, StyleSheet, FlatList, TextInput} from 'react-native';
 
@@ -7,7 +7,7 @@ import {ListItem, Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 Icon.loadFont();
 
-const list = [
+const listData = [
   {
     id: 1,
     name: 'Amy Farha',
@@ -140,16 +140,24 @@ const renderItem = ({item}) => (
   </ListItem>
 );
 
-const handleSearch = (text) => {
-  console.log(text);
-};
-
 const App = () => {
+  const [list, setList] = useState(listData);
+  const handleSearch = (text) => {
+    console.log(text);
+    if (text === '') {
+      setList(listData);
+    } else {
+      const filteredList = list.filter((item) =>
+        item.name.toLowerCase().includes(text.toLowerCase()),
+      );
+      setList(filteredList);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.searchBar}>
         <TextInput
-          placeholder="Type Here..."
+          placeholder="Search Here..."
           style={styles.search}
           lightTheme
           round
@@ -184,8 +192,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   search: {
-    color: '#000',
     width: '90%',
+    fontSize: 18,
+    fontWeight: '400',
   },
 });
 
