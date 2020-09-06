@@ -1,6 +1,12 @@
 import React, {useState} from 'react';
 
-import {View, StyleSheet, FlatList, TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 Icon.loadFont();
@@ -8,9 +14,10 @@ import renderItem from './Components/RenderItem';
 import listData from './Components/DataList';
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState(listData);
+
   const handleSearch = (text) => {
-    console.log(text);
     if (text === '') {
       setList(listData);
     } else {
@@ -30,14 +37,22 @@ const App = () => {
           round
           onChangeText={handleSearch}
         />
-        <Icon name="search" size={24} color="grey" style={styles.icon} />
+        <Icon name="search" size={24} style={styles.icon} />
       </View>
-      <FlatList
-        keyExtractor={(item) => item.id.toString()}
-        data={list}
-        renderItem={renderItem}
-        style={styles.list}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#bad555"
+          style={styles.loading}
+        />
+      ) : (
+        <FlatList
+          keyExtractor={(item) => item.id.toString()}
+          data={list}
+          renderItem={renderItem}
+          style={styles.list}
+        />
+      )}
     </View>
   );
 };
@@ -62,6 +77,12 @@ const styles = StyleSheet.create({
     width: '90%',
     fontSize: 18,
     fontWeight: '400',
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'grey',
   },
 });
 
