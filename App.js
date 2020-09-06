@@ -16,17 +16,13 @@ import listData from './Components/DataList';
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [list, setList] = useState(listData);
+  const [text, setText] = useState('');
 
-  const handleSearch = (text) => {
-    if (text === '') {
-      setList(listData);
-    } else {
-      const filteredList = list.filter((item) =>
-        item.name.toLowerCase().includes(text.toLowerCase()),
-      );
-      setList(filteredList);
-    }
-  };
+  const handleSearch = (text) => setText(text);
+
+  const filteredList = list.filter((item) =>
+    item.name.toLowerCase().includes(text.toLowerCase()),
+  );
   return (
     <View style={styles.container}>
       <View style={styles.searchBar}>
@@ -48,7 +44,7 @@ const App = () => {
       ) : (
         <FlatList
           keyExtractor={(item) => item.id.toString()}
-          data={list}
+          data={filteredList}
           renderItem={renderItem}
           style={styles.list}
         />
